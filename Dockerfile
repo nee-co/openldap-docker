@@ -4,13 +4,17 @@ ARG depends="openldap"
 
 WORKDIR /opt/openldap
 
-RUN apk add --no-cache $depends\
- && slaptest -f /etc/openldap/slapd.conf -F /opt/openldap
+RUN apk add --no-cache $depends
 
-ADD docker-entrypoint.sh /usr/local/bin
+ENV PATH $PATH:/opt/openldap/bin
+ENV OPENLDAP_ROOT_DN "cn=admin,dc=example,dc=net"
+ENV OPENLDAP_ROOT_PASSWORD ""
+ENV OPENLDAP_SUFFIX "dc=example,dc=net"
+
+ADD docker-entrypoint.sh ./bin/
 
 ENTRYPOINT ["docker-entrypoint.sh"]
 
-CMD slapd -F /opt/openldap -d 1
+CMD slapd -F ./ -d 1
 
 EXPOSE 389 636
