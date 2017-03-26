@@ -1,6 +1,6 @@
 #!/bin/sh
 
->> slapd.ldif <<EOF
+cat >> slapd.ldif <<EOF
 dn: olcDatabase=mdb,cn=config
 objectClass: olcDatabaseConfig
 objectClass: olcMdbConfig
