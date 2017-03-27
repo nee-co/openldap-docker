@@ -1,18 +1,10 @@
 #!/bin/sh
 
-cat >> slapd.ldif <<EOF
-dn: olcDatabase=mdb,cn=config
-objectClass: olcDatabaseConfig
-objectClass: olcMdbConfig
-olcDatabase: mdb
-olcDbMaxSize: 1073741824
-olcSuffix: $OPENLDAP_SUFFIX
-olcRootDN: $OPENLDAP_ROOT_DN
-olcRootPW: $OPENLDAP_ROOT_PASSWORD
-olcDbDirectory: /usr/local/var/openldap-data
-olcDbIndex: objectClass eq
-EOF
-
-slapadd -F ./ -l ./slapd.ldif
+cat /etc/openldap/slapd.ldif\
+    | sed -r "s/^olcModuleload/#olcModuleload/"\
+    | sed -r "s/(olcSuffix).*/\1: "$OPENLDAP_SUFFIX"/"\
+    | sed -r "s/(olcRootDN).*/\1: "$OPENLDAP_ROOT_DN"/"\
+    | sed -r "s/(olcRootPW).*/\1: "$OPENLDAP_ROOT_PASSWORD"/"\
+    | slapadd -F . -n 0
 
 exec "$@"
