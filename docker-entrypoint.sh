@@ -8,7 +8,7 @@ cat /etc/openldap/slapd.ldif\
     | slapadd -F . -n 0
 
 cat >> cn=config/olcDatabase={0}config.ldif << EOF
-$(slappasswd -s $OPENLDAP_CONFIG_ROOT_PASSWORD)
+olcRootPW: $(slappasswd -s $OPENLDAP_CONFIG_ROOT_PASSWORD)
 
 EOF
 
